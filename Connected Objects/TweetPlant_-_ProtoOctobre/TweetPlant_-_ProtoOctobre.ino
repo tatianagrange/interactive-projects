@@ -17,15 +17,12 @@ void setup() {
   // for debugging, wait until a serial console is connected
   delay(4000);
   while(!Serial);
-
+  pinMode(13, OUTPUT);
   Bridge.begin();
 }
 
 void loop()
 {
-
-    
-
     sensorValue = analogRead(sensorPin);
 	delay(1000);
 	if(sensorValue < 600)  
@@ -46,22 +43,26 @@ void loop()
 
 		String tweetText("J'ai soif!!");
 		StatusesUpdateChoreo.addInput("StatusUpdate", tweetText);
-    	unsigned int returnCode = StatusesUpdateChoreo.run();
+    	        unsigned int returnCode = StatusesUpdateChoreo.run();
 
-	    if (returnCode == 0) {
-	        Serial.println("Success! Tweet sent!");
-	    } else {
-	      while (StatusesUpdateChoreo.available()) {
-	        char c = StatusesUpdateChoreo.read();
-	        Serial.print(c);
-	      }
-	    } 
-	    StatusesUpdateChoreo.close();
+      	        if (returnCode == 0) {
+      	            Serial.println("Success! Tweet sent!");
+                    digitalWrite(13, HIGH);
+      	        } else {
+      	          while (StatusesUpdateChoreo.available()) {
+      	            char c = StatusesUpdateChoreo.read();
+      	            Serial.print(c);
+      	          }
+      	        }
+      
+      	        StatusesUpdateChoreo.close();
 
 	}
 	else{
 		Serial.println("Meme pas soif"); 
 	}
 
+        delay(1000);
+        digitalWrite(13, LOW);
 	delay(250000); //wait 5 min
 }
