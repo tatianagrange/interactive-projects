@@ -1,4 +1,0 @@
-#define TWITTER_ACCESS_TOKEN "12345"
-#define TWITTER_ACCESS_TOKEN_SECRET "67890"
-#define TWITTER_API_KEY "azerty"
-#define TWITTER_API_SECRET "wxcvbn"
