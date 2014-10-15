@@ -1,3 +1,5 @@
 .DS_Store
 TembooAccount.h
 TwitterAccount.h
+*.sublime-project
+*.sublime-workspace
