@@ -132,8 +132,8 @@ String getDate() {
 }
 
 boolean timeIsChek(){
-        int dif = getTimeStamp() - lastTweetTime;
-        int maxTime = (int)(oneDay/howManyTimeByDay);
+        long dif = getTimeStamp() - lastTweetTime;
+        long maxTime = (int)(oneDay/howManyTimeByDay);
         return dif > maxTime;
 }
 
