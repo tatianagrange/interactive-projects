@@ -1,0 +1,3 @@
+#define TEMBOO_ACCOUNT "name"  		// your Temboo account name 
+#define TEMBOO_APP_KEY_NAME "app"  	// your Temboo app key name
+#define TEMBOO_APP_KEY  "azerty"  	// your Temboo app key
