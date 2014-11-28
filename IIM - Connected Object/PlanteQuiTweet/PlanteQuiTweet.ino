@@ -144,7 +144,7 @@ void loop()
 /**
 *  Return the structure StatusesUpdateChoreo instanciate in this function
 */
-StatusesUpdateChoreo connectToTemboo(){
+TembooChoreo connectToTemboo(){
         TembooChoreo StatusesUpdateChoreo;
         StatusesUpdateChoreo.begin();
         StatusesUpdateChoreo.setAccountName(TEMBOO_ACCOUNT);
