@@ -15,7 +15,7 @@ Pour que la plante puisse *tweeter*, il faut autoriser cela sur son compte twitt
 
 Temboo est une Library qui permet d'accéder à de nombreuses API. C'est pourquoi nous allons utiliser ce service afin de connecter la carte.
 
-Le tuto pour autoriser l'accès à Twitter depuis temboo se trouve [ici](https://www.temboo.com/library/Library/Twitter/Tweets/StatusesUpdate/).
+Le tuto pour autoriser l'accès à Twitter depuis temboo se trouve [ici](https://www.temboo.com/library/Library/Twitter/Tweets/StatusesUpdate/), en texte, ou [ici](https://www.youtube.com/watch?v=Y68VOukqoXE&list=UUWXmg6TY-CnjqlOfReNtlCw), en vidéo.
 
 ## 3. Connecter la carte
 
