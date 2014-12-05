@@ -42,7 +42,7 @@ void setup() {
 	Console.begin();
 
         //Wait the connection of the Console
-	//while (!Console);
+	while (!Console);
 
         //And Print it
 	Console.println("You're connected to the Console!!!!");
@@ -70,7 +70,13 @@ void loop()
                 // So we have to count that time
                 tweetsNumber++;
                 
-                TembooChoreo StatusesUpdateChoreo = connectToTemboo();
+                TembooChoreo StatusesUpdateChoreo;
+                StatusesUpdateChoreo.begin();
+                StatusesUpdateChoreo.setAccountName(TEMBOO_ACCOUNT);
+                StatusesUpdateChoreo.setAppKeyName(TEMBOO_APP_KEY_NAME);
+                StatusesUpdateChoreo.setAppKey(TEMBOO_APP_KEY);
+                StatusesUpdateChoreo.setProfile("PlantQuiTweet");
+                StatusesUpdateChoreo.setChoreo("/Library/Twitter/Tweets/StatusesUpdate");
 
                 // The last time that the plant tweet is now.
                 lastTweetTime = getTimeStamp();
@@ -79,9 +85,10 @@ void loop()
                 String tweetText(makeTweet());
 
                 // And send the tweet
+                Console.println("Avant");
 		StatusesUpdateChoreo.addInput("StatusUpdate", tweetText);
 		unsigned int returnCode = StatusesUpdateChoreo.run();
-                
+                Console.println("Après");                
                 
                 // If the return code is 0, all is OK! Say It!
 		if (returnCode == 0) {
