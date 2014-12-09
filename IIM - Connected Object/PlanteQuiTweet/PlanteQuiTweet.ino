@@ -93,15 +93,6 @@ void loop()
                 // If the return code is 0, all is OK! Say It!
 		if (returnCode == 0) {
 			Console.println("Success! Tweet sent => " + tweetText);
-
-                        //Make a loooong led blink to show the tweet is send
-			digitalWrite(13, HIGH);
-                        delay(2000);
-                        digitalWrite(13, LOW);
-                        delay(500);
-                        digitalWrite(13,HIGH);
-                        delay(2000);
-                        digitalWrite(13, LOW);
                         
 		} else {
                         // Print the error
@@ -109,24 +100,6 @@ void loop()
 				char c = StatusesUpdateChoreo.read();
   				Console.print(c);
 			}
-
-                        //And make the led craaaaazy
-			digitalWrite(13, HIGH);
-			delay(500);
-			digitalWrite(13, LOW);
-			delay(500);
-			digitalWrite(13, HIGH);
-			delay(500);
-			digitalWrite(13, LOW);
-			delay(500);
-			digitalWrite(13, HIGH);
-			delay(500);
-			digitalWrite(13, LOW);
-			delay(500);
-			digitalWrite(13, HIGH);
-			delay(500);
-			digitalWrite(13, LOW);
-			delay(500);
 		}
 
                 // All is finnish with temboo. Close the connection
@@ -147,19 +120,6 @@ void loop()
 /* ******************************************************************* */
 /*                             Functions                               */
 /* ******************************************************************* */
-
-/**
-*  Return the structure StatusesUpdateChoreo instanciate in this function
-*/
-TembooChoreo connectToTemboo(){
-        TembooChoreo StatusesUpdateChoreo;
-        StatusesUpdateChoreo.begin();
-        StatusesUpdateChoreo.setAccountName(TEMBOO_ACCOUNT);
-        StatusesUpdateChoreo.setAppKeyName(TEMBOO_APP_KEY_NAME);
-        StatusesUpdateChoreo.setAppKey(TEMBOO_APP_KEY);
-        StatusesUpdateChoreo.setProfile("PlantQuiTweet");
-        StatusesUpdateChoreo.setChoreo("/Library/Twitter/Tweets/StatusesUpdate");
-}
 
 /**
  *  return the time in int
