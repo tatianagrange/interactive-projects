@@ -17,12 +17,12 @@ int ledPin = 13;                // The led's pin
 
 //Define all variables for check the number of tweet
 long lastTweetTime = 0;        // The time since the last tweet
-long howManyTimeByDay = 24;    // This plant will tweet one time by hour. 24 times by day.
+long howManyTimeByDay = 1;    // This plant will tweet one time by hour. 24 times by day.
 long oneDay = 86400;           // How many of seconds in one day?
 int tweetsNumber = 0;          // Remember the number of tweet
 
 //And this value is to define by you!
-int minimumHumidity = 450;
+int minimumHumidity = 300;
 
 
 /* ******************************************************************* */
@@ -39,10 +39,11 @@ void setup() {
         // We want to use Bridge, to access to internet.
         // And we want to use the console to check what append
 	Bridge.begin();
-	Console.begin();
 
+        Console.begin(); 
+        
         //Wait the connection of the Console
-	while (!Console);
+  	//while (!Console);
 
         //And Print it
 	Console.println("You're connected to the Console!!!!");
@@ -61,6 +62,7 @@ void loop()
 {
 	sensorValue = analogRead(sensorPin);
 	delay(1000);
+        Console.println(sensorValue);
 
         // 600 is the value when the captor is in the water. 
         // Mabey you have to test to choose what you want to do...
@@ -89,7 +91,7 @@ void loop()
 		StatusesUpdateChoreo.addInput("StatusUpdate", tweetText);
 		unsigned int returnCode = StatusesUpdateChoreo.run();
                 Console.println("Après");                
-                
+
                 // If the return code is 0, all is OK! Say It!
 		if (returnCode == 0) {
 			Console.println("Success! Tweet sent => " + tweetText);
@@ -193,5 +195,6 @@ String makeTweet(){
                        toReturn += " et j'ai TOUJOURS soif... Help me!!!";
                        break; 
         }
+        toReturn += " - @devincifablab";
         return toReturn;
 }
