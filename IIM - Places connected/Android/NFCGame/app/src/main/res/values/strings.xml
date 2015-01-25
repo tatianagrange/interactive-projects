@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">NFCGame</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+
+    <string name="nfc_device_no_nfc">Ce terminal ne supporte pas le NFC</string>
+    <string name="nfc_nfc_not_activate">Le NFC n\'est pas activé. Veuillez cocher la case NFC dans les paramètres.</string>
+    <string name="nfc_compatible_device">Terminal compatible avec le NFC</string>
+    <string name="nfc_start_detection">Lance détection</string>
+    <string name="nfc_bad_mime_type">"Mauvais mime type: "</string>
+    <string name="nfc_warning_ndef_discovered">Attention! Pas passé dans le if! Pas de NDEF DICOVERED!</string>
+    <string name="nfc_unsupoprted_encoding">Encodage non supporté</string>
+    <string name="nfc_tag_read_only">Le Tag est en Read Only</string>
+    <string name="nfc_size">Pas assez de place sur le tag</string>
+    <string name="nfc_not_ndef">L\'enregistrement n\'est pas de type NDEF</string>
+    <string name="nfc_win">Le tag a été encodé</string>
+    <string name="nfc_lose">"Le tag n'a pas été encodé: "</string>
+
+    <!-- Indice -->
+    <!-- Ho! Bien vu! -->
+    <!-- Je crois qu'il ne faut pas hésiter à demander à Patricia si elle sait quelque chose... -->
+</resources>
