@@ -47,7 +47,7 @@ public class MainActivity extends NFCActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.btn){
-            writeMode = true;
+            setWriteMode(true);
             setTextToWrite(((EditText)findViewById(R.id.editText)).getText().toString());
             dialog = ProgressDialog.show(this, "","Approcher un tag", true);
         }

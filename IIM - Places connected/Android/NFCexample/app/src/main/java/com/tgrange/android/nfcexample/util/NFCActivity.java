@@ -11,7 +11,6 @@ import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.WindowManager;
 
 import com.tgrange.android.nfcexample.R;
@@ -128,6 +127,11 @@ public abstract class NFCActivity extends UtilActivity implements NFCListener {
 	/* **********************
 	 * 		Own methods		*
 	 * ********************** */
+
+    public void setWriteMode(boolean writeMode) {
+        this.writeMode = writeMode;
+    }
+
     public void setTextToWrite(String textToWrite) {
         this.textToWrite = textToWrite;
     }
