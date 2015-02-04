@@ -28,4 +28,6 @@ public class UtilActivity extends Activity {
     // Indice:
     //
     // Faîtes un tour du côté de chez ceux qui gèrent votre réseau
+    // Mais ne leurs demandez rien! Les pauvres se font harceler!
+    // C'est simplement bien caché dans le couloir. Donc laissez les en paix :)
 }
