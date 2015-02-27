@@ -4,6 +4,12 @@ Le but du projet est de créé un système sur Arduino capable d'activer, grâce
 
 Le NFC permettra aux utilisateurs du lieu d'accéder ou non au mécanisme, grâce aux identifiants stocké sur la carte SD.
 
+##Les librairies
+Voici les librairies utilisées dans le projet:
+
+* [NDEF](https://github.com/don/NDEF) - Pour NFCAdapter
+* [PN532](https://github.com/Seeed-Studio/PN532) - Pour le module NFC
+
 ##test - lcdandnfc
 
 Ce projet Arduino contient un premier test.
