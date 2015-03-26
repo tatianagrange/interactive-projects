@@ -63,6 +63,17 @@ void setup() {
 		dataFile.println("uid,hour,acces");
 		dataFile.close();
 	}
+
+	if (!SD.exists(ADMIN_FILE)) {
+		dataFile = SD.open(ADMIN_FILE, FILE_WRITE);
+		dataFile.println("");
+		dataFile.println("Tralala");
+		dataFile.println("Youp");
+		dataFile.println("Popopo");
+		dataFile.println("B5 DF F9 E5");
+		dataFile.println("trussdc zdz e");
+		dataFile.close();
+	}
 }
 
 void loop() {
@@ -74,23 +85,38 @@ void loop() {
 	if(isTagPresent && !hasTag){
 		hasTag = true;
 		tag = nfc.read();
-		isAdmin();
-
-		if(adminMode){
-
-		}
-		else{
-			boolean isAuth = isAuthorised();
-			logAccess(isAuth);
-			if(isAuth){
-				timeLeft = millis()/1000;
-				//Relais On
-			}
-		}
+		makeProcess();
 	}else if(!isTagPresent){
 		hasTag = false;
 	}
 
+	showOnLCD();
+}
+
+////////////////////////////////////////////////
+//             		  Fuctions 	              //
+////////////////////////////////////////////////
+String getUID(){
+	return tag.getUidString();
+}
+
+void makeProcess(){
+	isAdmin();
+
+	if(adminMode){
+
+	}
+	else{
+		boolean isAuth = isAuthorised();
+		logAccess(isAuth);
+		if(isAuth){
+			timeLeft = millis()/1000;
+			//Relais On
+		}
+	}
+}
+
+void showOnLCD(){
 	if(timeLeft > 0){
 		printOnLCD("Accès autorisé",getTimeLeft());
 	}else if(timeLeft == 0){
@@ -100,13 +126,6 @@ void loop() {
 		timeLeft = -1;
 		printOnLCD("Veuillez passer","votre badge");
 	}
-}
-
-////////////////////////////////////////////////
-//             		  Fuctions 	              //
-////////////////////////////////////////////////
-String getUID(){
-	return tag.getUidString();
 }
 
 void printOnLCD(String textFirstLine, String textSecondLine){
@@ -119,19 +138,53 @@ void printOnLCD(String textFirstLine, String textSecondLine){
 
 void logAccess(boolean authorizedAccess){
 	File dataFile = SD.open(LOG_FILE, FILE_WRITE);
-	String text = getUID();
-	text += ", 14h42, ";
-	text += authorizedAccess ? "accès autorisé" : "accès refusé";
-	dataFile.println(text);
-	dataFile.close();
+	if(dataFile){
+		String text = getUID();
+		text += ", 14h42, ";
+		text += authorizedAccess ? "accès autorisé" : "accès refusé";
+		dataFile.println(text);
+		dataFile.close();
 
-	lcd.clear();
-	printOnLCD("Bonjour",getUID());
-	delay(1000);
+		printOnLCD("Bonjour",getUID());
+		delay(1000);
+	}
 }
 
 void isAdmin(){
+	File dataFile = SD.open(ADMIN_FILE,FILE_READ);
+	if(dataFile){
+		String content("");
+		while (dataFile.available()) {
+			char c = dataFile.read();
+			if(c == 10){
+				Serial.println(content);
+				Serial.println(getUID());
+				if(getUID().equals(content)){
+					digitalWrite(buzzerPin, HIGH);
+					delay(200);
+					digitalWrite(buzzerPin, LOW);
+					delay(200);
+					digitalWrite(buzzerPin, HIGH);
+					delay(200);
+					digitalWrite(buzzerPin, LOW);
+					delay(200);
+					digitalWrite(buzzerPin, HIGH);
+					delay(200);
+					digitalWrite(buzzerPin, LOW);
+					delay(200);
+					digitalWrite(buzzerPin, HIGH);
+					delay(200);
+					digitalWrite(buzzerPin, LOW);
+					delay(200);
+				}
 
+				content = "";
+			}
+			else{
+				content += c;
+			}
+		}
+	}
 }
 
 boolean isAuthorised(){

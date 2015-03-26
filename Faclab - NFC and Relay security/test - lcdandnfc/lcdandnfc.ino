@@ -53,7 +53,7 @@ void loop() {
 		printOnLCD(getUID(),getTimeLeft());
 	}else if(timeLeft == 0){
 		digitalWrite(buzzerPin, HIGH);
-		delay(1000);
+		delay(10000);
 		digitalWrite(buzzerPin, LOW);
 		timeLeft = -1;
 		printOnLCD("Veuillez passer","votre badge");
