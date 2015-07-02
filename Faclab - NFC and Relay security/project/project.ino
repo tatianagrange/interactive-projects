@@ -1,9 +1,7 @@
-#include <LiquidCrystal.h>
 #include <Wire.h>
 #include <PN532_I2C.h>
 #include <PN532.h>
 #include <NfcAdapter.h>
-#include <TinkerKit.h>
 #include <SD.h>
 #include <SPI.h>
 #include <LiquidCrystal_I2C.h>
@@ -25,7 +23,6 @@ PN532_I2C pn532_i2c(Wire);
 NfcAdapter nfc = NfcAdapter(pn532_i2c);
 boolean hasTag = false;
 LiquidCrystal_I2C lcd(0x27,16,2);
-TKRelay relay1(7);
 
 /*Variables*/
 const int sdChip = 4;
