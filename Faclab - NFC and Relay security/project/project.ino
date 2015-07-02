@@ -6,6 +6,7 @@
 #include <TinkerKit.h>
 #include <SD.h>
 #include <SPI.h>
+#include <LiquidCrystal_I2C.h>
 
 ////////////////////////////////////////////////
 //                  Define                    //
@@ -23,7 +24,7 @@
 PN532_I2C pn532_i2c(Wire);
 NfcAdapter nfc = NfcAdapter(pn532_i2c);
 boolean hasTag = false;
-LiquidCrystal lcd(9, 8, 6, 5, 3, 2);
+LiquidCrystal_I2C lcd(0x27,16,2);
 TKRelay relay1(7);
 
 /*Variables*/
@@ -32,7 +33,6 @@ boolean isCardPresent = true;
 NfcTag tag;
 int timeLeft = -1;
 int buzzerPin = A0;
-boolean adminMode = false;
 
 
 
@@ -40,11 +40,14 @@ boolean adminMode = false;
 //                 Base Code                  //
 ////////////////////////////////////////////////
 void setup() {
+	/************** Init Pin **************/
 	Serial.begin(9600);
 	pinMode(buzzerPin, OUTPUT);
 	nfc.begin();
-	lcd.begin(16, 2);
+	lcd.init();
+	lcd.backlight();
 	
+	/************** Check SD Card **************/
 	printOnLCD("Initialisation","Carte SD");
 	delay(1000);
 	pinMode(10, OUTPUT);
@@ -53,27 +56,24 @@ void setup() {
 		isCardPresent = false;
 		return;
 	}
-	printOnLCD("Carte SD OK","");
+
+	/************** Check Files on SD Card **************/
+	printOnLCD("Vérification","des fichiers");
 	delay(1000);
-	printOnLCD("Veuillez passer","votre badge");
+	generateFiles();
 
-	File dataFile;
-	if (!SD.exists(LOG_FILE)) {
-		dataFile = SD.open(LOG_FILE, FILE_WRITE);
-		dataFile.println("uid,hour,acces");
-		dataFile.close();
-	}
 
-	if (!SD.exists(ADMIN_FILE)) {
-		dataFile = SD.open(ADMIN_FILE, FILE_WRITE);
-		dataFile.println("");
-		dataFile.println("Tralala");
-		dataFile.println("Youp");
-		dataFile.println("Popopo");
-		dataFile.println("B5 DF F9 E5");
-		dataFile.println("trussdc zdz e");
+	/************** Check Admin on SD Card **************/
+	File dataFile = SD.open(ACCESS_FILE,FILE_READ);
+	if (!dataFile.available()) {
+		printOnLCD("Pas d'access","Ajouter cartes");
 		dataFile.close();
+		return;
 	}
+	dataFile.close();
+
+	/************** All is ok **************/
+	askForCard();
 }
 
 void loop() {
@@ -85,7 +85,18 @@ void loop() {
 	if(isTagPresent && !hasTag){
 		hasTag = true;
 		tag = nfc.read();
-		makeProcess();
+
+		//Is the tag authorised to action relais ?
+		boolean isAuth = isAuthorised(getUID());
+
+		//Log it
+		logAccess(isAuth);
+
+
+		if(isAuth){
+			timeLeft = millis()/1000;
+			//Relais On
+		}
 	}else if(!isTagPresent){
 		hasTag = false;
 	}
@@ -98,22 +109,6 @@ void loop() {
 ////////////////////////////////////////////////
 String getUID(){
 	return tag.getUidString();
-}
-
-void makeProcess(){
-	isAdmin();
-
-	if(adminMode){
-
-	}
-	else{
-		boolean isAuth = isAuthorised();
-		logAccess(isAuth);
-		if(isAuth){
-			timeLeft = millis()/1000;
-			//Relais On
-		}
-	}
 }
 
 void showOnLCD(){
@@ -134,6 +129,8 @@ void printOnLCD(String textFirstLine, String textSecondLine){
 	lcd.print(textFirstLine);
 	lcd.setCursor(0,1);
 	lcd.print(textSecondLine);
+	Serial.println(textFirstLine);
+	Serial.println(textSecondLine);
 }
 
 void logAccess(boolean authorizedAccess){
@@ -148,47 +145,31 @@ void logAccess(boolean authorizedAccess){
 		printOnLCD("Bonjour",getUID());
 		delay(1000);
 	}
+	dataFile.close();
 }
 
-void isAdmin(){
-	File dataFile = SD.open(ADMIN_FILE,FILE_READ);
-	if(dataFile){
-		String content("");
-		while (dataFile.available()) {
-			char c = dataFile.read();
-			if(c == 10){
-				Serial.println(content);
-				Serial.println(getUID());
-				if(getUID().equals(content)){
-					digitalWrite(buzzerPin, HIGH);
-					delay(200);
-					digitalWrite(buzzerPin, LOW);
-					delay(200);
-					digitalWrite(buzzerPin, HIGH);
-					delay(200);
-					digitalWrite(buzzerPin, LOW);
-					delay(200);
-					digitalWrite(buzzerPin, HIGH);
-					delay(200);
-					digitalWrite(buzzerPin, LOW);
-					delay(200);
-					digitalWrite(buzzerPin, HIGH);
-					delay(200);
-					digitalWrite(buzzerPin, LOW);
-					delay(200);
-				}
+boolean isAuthorised(String uid){
+	File dataFile = SD.open(ACCESS_FILE,FILE_READ);
+	String content("");
+	while (dataFile.available()) {
+		char c = dataFile.read();
+		if(c == 10){
+			if(uid.equals(content)){
+				digitalWrite(buzzerPin, HIGH);
+				delay(200);
+				digitalWrite(buzzerPin, LOW);
+				delay(200);
+				return true;
+			}
 
-				content = "";
-			}
-			else{
-				content += c;
-			}
+			content = "";
+		}
+		else{
+			content += c;
 		}
 	}
-}
-
-boolean isAuthorised(){
-	return true;
+	dataFile.close();
+	return false;
 }
 
 String getTimeLeft(){
@@ -209,3 +190,24 @@ String getTimeLeft(){
 	return myTime;
 }
 
+void generateFiles(){
+	File dataFile;
+	if (!SD.exists(LOG_FILE)) {
+		printOnLCD("Création du","fichier de log");
+		delay(2000);
+		dataFile = SD.open(LOG_FILE, FILE_WRITE);
+		dataFile.println("uid,hour,acces");
+		dataFile.close();
+	}
+
+	if (!SD.exists(ACCESS_FILE)) {
+		printOnLCD("Création du","fichier acces");
+		delay(2000);
+		dataFile = SD.open(ACCESS_FILE, FILE_WRITE);
+		dataFile.close();
+	}
+}
+
+void askForCard(){
+	printOnLCD("Veuillez passer","votre badge");
+}
